@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
+import { IUser } from "@/interfaces/user";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -27,15 +29,22 @@ type UserFormData = z.infer<typeof formSchema>;
 interface UserProfileFormProps {
   onSave: (userProfileData: UserFormData) => void;
   isLoading: boolean;
+  currentUser: IUser;
 }
 
 const UserProfileForm: React.FC<UserProfileFormProps> = ({
   onSave,
   isLoading,
+  currentUser,
 }) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: currentUser,
   });
+
+  useEffect(() => {
+    form.reset(currentUser);
+  }, [currentUser, form]);
 
   return (
     <Form {...form}>
