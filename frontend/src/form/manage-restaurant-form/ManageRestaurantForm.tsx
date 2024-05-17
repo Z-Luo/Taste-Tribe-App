@@ -3,6 +3,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DetailsSection from "./DetailsSection";
+import { Separator } from "@/components/ui/separator";
+import CuisinesSection from "./CuisinesSection";
+import MenuSection from "./MenuSection";
+import ImageSection from "./ImageSection";
+import LoadingButton from "@/components/LoadingButton";
+import { Button } from "@/components/ui/button";
 
 type restaurantFormData = z.infer<typeof formSchema>;
 
@@ -63,6 +69,13 @@ const ManageRestaurantForm: React.FC<ManageRestaurantFormProps> = ({
         className="space-y-8 bg-gray-50 p-10 rounded-lg"
       >
         <DetailsSection />
+        <Separator />
+        <CuisinesSection />
+        <Separator />
+        <MenuSection />
+        <Separator />
+        <ImageSection />
+        {isLoading ? <LoadingButton /> : <Button type="submit">Submit</Button>}
       </form>
     </Form>
   );
