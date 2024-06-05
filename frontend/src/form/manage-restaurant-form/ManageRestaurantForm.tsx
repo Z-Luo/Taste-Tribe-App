@@ -9,6 +9,8 @@ import MenuSection from "./MenuSection";
 import ImageSection from "./ImageSection";
 import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
+import { IRestaurant } from "@/interfaces/restaurant";
+import { useEffect } from "react";
 
 type RestaurantFormData = z.infer<typeof formSchema>;
 
@@ -43,6 +45,7 @@ const formSchema = z.object({
 });
 
 interface ManageRestaurantFormProps {
+  restaurant?: IRestaurant;
   onSave: (restaurantFormData: FormData) => void;
   isLoading: boolean;
 }
@@ -50,6 +53,7 @@ interface ManageRestaurantFormProps {
 const ManageRestaurantForm: React.FC<ManageRestaurantFormProps> = ({
   onSave,
   isLoading,
+  restaurant,
 }) => {
   const form = useForm<RestaurantFormData>({
     resolver: zodResolver(formSchema),
@@ -58,6 +62,30 @@ const ManageRestaurantForm: React.FC<ManageRestaurantFormProps> = ({
       menuItems: [{ name: "", price: 0 }],
     },
   });
+
+  useEffect(() => {
+    if (!restaurant) {
+      return;
+    }
+
+    // price lowest domination of 100 = 100 cents == 1 dollar
+    const deliveryPriceFormatted = parseInt(
+      (restaurant.deliveryPrice / 100).toFixed(2)
+    );
+
+    const menuItemsFormatted = restaurant.menuItems.map((item) => ({
+      ...item,
+      price: parseInt((item.price / 100).toFixed(2)),
+    }));
+
+    const updatedRestaurant = {
+      ...restaurant,
+      deliveryPrice: deliveryPriceFormatted,
+      menuItems: menuItemsFormatted,
+    };
+
+    form.reset(updatedRestaurant);
+  }, [form, restaurant]);
 
   const onSubmit = (formDataJson: RestaurantFormData) => {
     const formData = new FormData();
