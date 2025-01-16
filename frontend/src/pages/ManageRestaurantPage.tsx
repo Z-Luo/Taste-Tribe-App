@@ -4,6 +4,7 @@ import {
   useGetMyRestaurant,
 } from "@/api/MyRestaurantApi";
 
+//
 const ManageRestaurantPage = () => {
   const { createRestaurant, isLoading } = useCreateMyRestaurant();
   const { restaurant } = useGetMyRestaurant();
