@@ -1,5 +1,6 @@
 import landingImg from "@/assets/landing.png";
 import appDownloadImg from "@/assets/appDownload.png";
+// import SearchBar from "@/components/SearchBar";
 
 const HomePage = () => {
   return (
@@ -9,6 +10,7 @@ const HomePage = () => {
           Tuck into a takeaway today
         </h1>
         <span className="text-xl">Food is just a click away!</span>
+        {/* <SearchBar placeHolder="Search by City" /> */}
       </div>
       <div className="grid md:grid-cols-2 gap-5">
         <img src={landingImg} />
