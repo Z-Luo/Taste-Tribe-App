@@ -17,3 +17,12 @@ export interface IRestaurant {
   imageUrl: string;
   lastUpdated: string;
 } 
+
+export interface IRestaurantSearchResponse {
+  data: IRestaurant[];
+  pagination: {
+    total: number;
+    page: number;
+    pages: number;
+  }
+}
