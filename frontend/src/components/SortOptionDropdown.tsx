@@ -18,7 +18,7 @@ const SORT_OPTIONS = [
   },
   {
     label: "Delivery price",
-    value: "bestMatch",
+    value: "deliveryPrice",
   },
   {
     label: "Estimated delivery time",
@@ -30,11 +30,15 @@ const SortOptionDropdown = ({
   onChange,
   sortOption,
 }: SortOptionDropdownProps) => {
+  const selectedSortLabel =
+    SORT_OPTIONS.find((option) => option.value === sortOption)?.label ||
+    SORT_OPTIONS[0].label;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer">
         <Button variant="outline" className="w-full">
-          Sort by: {sortOption}
+          Sort by: {selectedSortLabel}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
