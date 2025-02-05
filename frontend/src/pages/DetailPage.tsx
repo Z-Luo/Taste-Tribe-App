@@ -1,12 +1,53 @@
 import { useGetRestaurant } from "@/api/RestaurantApi";
 import MenuItem from "@/components/MenuItem";
+import OrderSummary from "@/components/OrderSummary";
 import RestaurantInfo from "@/components/RestaurantInfo";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Card } from "@/components/ui/card";
+import { IMenuItem } from "@/interfaces/restaurant";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
+export type CartItem = {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
+
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const addToCart = (menuItem: IMenuItem) => {
+    setCartItems((prevCartItems) => {
+      // check if item already in cart
+      const existingCartItem = prevCartItems.find(
+        (item) => item._id === menuItem._id
+      );
+      // if item in cart, update quantity, if item not in cart, add as new item
+      let updatedCartItems;
+      if (existingCartItem) {
+        updatedCartItems = prevCartItems.map((item) =>
+          item._id === menuItem._id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        updatedCartItems = [
+          ...prevCartItems,
+          {
+            _id: menuItem._id,
+            name: menuItem.name,
+            price: menuItem.price,
+            quantity: 1,
+          },
+        ];
+      }
+      return updatedCartItems;
+    });
+  };
 
   if (isLoading || !restaurant) {
     return "Loading...";
@@ -25,8 +66,13 @@ const DetailPage = () => {
           <RestaurantInfo restaurant={restaurant} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
           {restaurant.menuItems.map((item) => (
-            <MenuItem menuItem={item} />
+            <MenuItem menuItem={item} addToCart={() => addToCart(item)} />
           ))}
+        </div>
+        <div>
+          <Card>
+            <OrderSummary restaurant={restaurant} cartItems={cartItems} />
+          </Card>
         </div>
       </div>
     </div>
