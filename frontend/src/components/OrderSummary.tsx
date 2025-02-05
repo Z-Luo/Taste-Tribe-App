@@ -15,7 +15,7 @@ const OrderSummary = ({ restaurant, cartItems }: OrderSummaryProps) => {
       (acc, cur) => acc + cur.price * cur.quantity,
       0
     );
-    const totalWithDelivery = totalInCents + restaurant.deliveryPrice;
+    const totalWithDelivery = totalInCents + +restaurant.deliveryPrice;
 
     return (totalWithDelivery / 100).toFixed(2);
   };
